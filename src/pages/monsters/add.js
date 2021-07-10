@@ -10,8 +10,32 @@ class MonsterForm extends React.Component {
 
     this.state = {
       monsterData: [],
-      monsterTypes: []
+      monsterTypes: [],
+      qsID: 0
     }
+  }
+
+  componentDidMount() {
+    const paramsList = new URLSearchParams(window.location.search);
+    const MonsterID = paramsList.get('id');
+
+    this.setState({
+      qsID: MonsterID
+    });
+
+    this.getMonsterByID(MonsterID)
+      .then(monster => {
+        this.setState({
+          monsterData: monster
+        });
+      });
+
+    this.getMonsterTypes()
+      .then(types => {
+        this.setState({
+          monsterTypes: types
+        });
+      });
   }
 
   getMonsterByID = async (id) => {
@@ -45,32 +69,16 @@ class MonsterForm extends React.Component {
     return retval;
   }
 
-  componentDidMount() {
-    const paramsList = new URLSearchParams(window.location.search);
-    const MonsterID = paramsList.get('id');
-
-    this.getMonsterByID(MonsterID)
-      .then(monster => {
-        this.setState({
-          monsterData: monster
-        });
-      });
-
-    this.getMonsterTypes()
-      .then(types => {
-        this.setState({
-          monsterTypes: types
-        });
-      });
+  handleDelete = () => {
+    alert('deleted')
   }
 
-
   frmSubmit = (items) => {
-    console.log(items);
+
   }
 
   frmFail = (items) => {
-    console.log(items);
+    alert('Please fix the invalid inputs');
   }
 
   render() {
@@ -82,10 +90,9 @@ class MonsterForm extends React.Component {
       </footer></div>)
     }
 
-    const qs = new URLSearchParams(window.location.search);
-    const qsID = qs.get('id');
+
     let titleString = 'Modify';
-    if (qsID == 0) {
+    if (this.state.qsID == 0) {
       titleString = 'Create New';
     }
 
@@ -97,7 +104,6 @@ class MonsterForm extends React.Component {
         <h1>Monster Lab - {titleString} </h1>
         <div id="root" style={{ justifyContent: 'center' }}>
           <header>
-
           </header>
           <main>
             <div style={
@@ -201,21 +207,21 @@ class MonsterForm extends React.Component {
                       <Form.Item
                         label="Base Wealth"
                         name="baseWealth"
-                        initialValue={monst.Money ?? 1}
+                        initialValue={monst.Money ?? 10}
                       >
                         <InputNumber step={10} />
                       </Form.Item>
                       <Form.Item
                         label="Base XP"
                         name="baseXP"
-                        initialValue={monst.XP ?? 1}
+                        initialValue={monst.XP ?? 10}
                       >
                         <InputNumber step={10} />
                       </Form.Item>
                       <Form.Item
                         label="Level Multiplier"
                         name="lvlMult"
-                        initialValue={monst.LVL_Multiplier ?? 1}
+                        initialValue={monst.LVL_Multiplier ?? 0.05}
                       >
                         <InputNumber step={.05} precision={2} />
                       </Form.Item>
@@ -224,6 +230,11 @@ class MonsterForm extends React.Component {
                   <tr>
                     <td colSpan={2}>
                       <Button type='primary' htmlType="submit">Submit</Button>
+                      {() => {
+                        if (this.state.qsID > 0) {
+                          return <Button type='primary' danger onClick={() => this.handleDelete}>Delete</Button>
+                        }
+                      }}
                     </td>
                   </tr>
                 </table>
@@ -231,8 +242,11 @@ class MonsterForm extends React.Component {
             </div>
           </main>
           <footer>
-            <Link className="grid-button" to='/'>
+            <Link className="grid-button layout-btn" to='/'>
               Return to home
+            </Link>
+            <Link className="grid-button layout-btn" to='../'>
+              Return to Monster Lab
             </Link>
           </footer>
         </div>

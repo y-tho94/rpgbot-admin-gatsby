@@ -73,17 +73,28 @@ class MonstersPage extends React.Component {
         <h1>Monster Lab</h1>
         <div id="root" style={{ justifyContent: 'center' }}>
           <header>
-
+            <Link
+              className='grid-button layout-btn'
+              to='add?id=0'
+            >
+              Create New Monster
+            </Link>
+            <Link
+              className='grid-button layout-btn'
+              to='add?id=0'
+            >
+              Manage Types
+            </Link>
           </header>
           <main>
             <Table
               columns={dataCols}
               dataSource={dataRows}
-              pagination={{ defaultPageSize: 25 }}
+              pagination={{ defaultPageSize: 25, position: ['none', 'bottomCenter'] }}
               rowSelection={{
                 type: 'radio',
                 onChange: selectedRowKey => {
-                  window.location.assign(`add?id=${selectedRowKey}`);
+                  window.location.assign(`/monsters/add?id=${selectedRowKey}`);
                 }
               }}
             />
