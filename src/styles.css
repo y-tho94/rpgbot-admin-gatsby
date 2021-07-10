@@ -1,0 +1,75 @@
+@import '~antd/dist/antd.css';
+@import '~antd/dist/antd.dark.css';
+
+html{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:12pt;
+}
+body{
+    background-color: #0f0f0f;
+    text-align: center;
+}
+
+#root{
+    padding:0 4rem;
+    height:90vh;
+    display:flex; 
+    justify-content:flex-start; 
+    align-content: flex-start; 
+    flex-direction: column;
+}
+
+h1{
+    color:white;
+    text-align: center;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: repeat(1fr, 2);
+    gap: 5px;
+    justify-content:center;
+    width:50%; 
+    max-width:900px; 
+    margin:auto;
+}
+
+.grid-item{
+    padding:2em;
+    border-radius:5px;
+    transition: all, .5s, ease-in, .1s;
+    color:#0f0f0f;
+    font-weight: 700;
+    text-align: center;
+    background-color: #888;
+}
+
+.grid-button{
+    padding:2em;
+    border-radius:5px;
+    transition: all, .5s, ease-in, .1s;
+    color:#0f0f0f;
+    font-weight: 700;
+    text-align: center;
+    background-color: #888;
+}
+.grid-button:hover{
+    cursor:pointer;
+    transform: scale(1.05);
+    border:1px solid grey;
+    text-decoration: underline;
+}
+
+main{
+    flex-grow:1;
+}
+
+footer{
+    color:#0f0f0f; 
+    background-color:orange; 
+    padding:2em;
+}
+
+header, main, footer{
+    flex-shrink: 0;
+}
