@@ -40,7 +40,7 @@ class MonsterForm extends React.Component {
 
     const response = await fetch('https://dev.freydo-apis.tech/rpgbot/monster/get-types-lk/index.php', options);
     const dataItem = await response.json();
-    const retval = dataItem[0];
+    const retval = Object.values(dataItem[0]);
 
     return retval;
   }
@@ -84,11 +84,13 @@ class MonsterForm extends React.Component {
 
     const qs = new URLSearchParams(window.location.search);
     const qsID = qs.get('id');
-    console.log(qsID);
     let titleString = 'Modify';
     if (qsID == 0) {
       titleString = 'Create New';
     }
+
+    const monst = this.state.monsterData;
+    const types = this.state.monsterTypes;
 
     return (
       <>
@@ -98,49 +100,133 @@ class MonsterForm extends React.Component {
 
           </header>
           <main>
-            <div style={{ border: '1px solid white', width: '50%', margin: 'auto', padding: '2rem' }}>
+            <div style={
+              {
+                border: '1px solid white',
+                width: '50%',
+                margin: 'auto',
+                padding: '2rem',
+                textAlign: 'left'
+              }}
+            >
               <Form
                 name="frmMonster"
                 onFinish={this.frmSubmit}
                 onFinishFailed={this.frmFail}
+                layout='vertical'
               >
-                <Form.Item
-                  label="Name"
-                  name="name"
-                  rules={
-                    [
-                      {
-                        required: true,
-                        message: '*Name required'
-                      }
-                    ]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  label="Type"
-                  name="type_ID"
-                  rules={
-                    [
-                      {
-                        required: true,
-                        message: '*Type required'
-                      }
-                    ]}
-                >
-                  <Select>
-                    {this.state.monsterTypes.map(t => {
-                      return (
-                        <Select.Option
-                          key={t.id}
-                        >
-                          {t.Type_Desc}
-                        </Select.Option>
-                      )
-                    })}
-                  </Select>
-                </Form.Item>
-                <Button type='primary' htmlType="submit">Submit</Button>
+                <table style={{ width: '50%', margin: 'auto' }}>
+                  <tr>
+                    <td colSpan={2}>
+                      <Form.Item
+                        label="Name"
+                        name="name"
+                        initialValue={monst.name ?? ''}
+                        rules={
+                          [
+                            {
+                              required: true,
+                              message: '*Name required'
+                            }
+                          ]}
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        label="Type"
+                        name="type_ID"
+                        initialValue={monst.type}
+                        rules={
+                          [
+                            {
+                              required: true,
+                              message: '*Type required'
+                            }
+                          ]}
+                      >
+                        <Select>
+                          {types.map(t => {
+                            return (
+                              <Select.Option
+                                key={t.id}
+                                value={t.id}
+                              >
+                                {t.Type_Desc}
+                              </Select.Option>
+                            )
+                          })}
+                        </Select>
+                      </Form.Item>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <Form.Item
+                        label="Base HP"
+                        name="baseHP"
+                        initialValue={monst.HP ?? 1}
+                      >
+                        <InputNumber step={1} />
+                      </Form.Item>
+                      <Form.Item
+                        label="Base ATK"
+                        name="baseATK"
+                        initialValue={monst.ATK ?? 1}
+                      >
+                        <InputNumber step={1} />
+                      </Form.Item>
+                      <Form.Item
+                        label="Base DEF"
+                        name="baseDEF"
+                        initialValue={monst.DEF ?? 1}
+                      >
+                        <InputNumber step={1} />
+                      </Form.Item>
+                      <Form.Item
+                        label="Base SPD"
+                        name="baseSPD"
+                        initialValue={monst.SPD ?? 1}
+                      >
+                        <InputNumber step={1} />
+                      </Form.Item>
+                    </td>
+                    <td>
+                      <Form.Item
+                        label="Base SPEC"
+                        name="baseSPEC"
+                        initialValue={monst.Spec ?? 1}
+                      >
+                        <InputNumber step={1} />
+                      </Form.Item>
+                      <Form.Item
+                        label="Base Wealth"
+                        name="baseWealth"
+                        initialValue={monst.Money ?? 1}
+                      >
+                        <InputNumber step={10} />
+                      </Form.Item>
+                      <Form.Item
+                        label="Base XP"
+                        name="baseXP"
+                        initialValue={monst.XP ?? 1}
+                      >
+                        <InputNumber step={10} />
+                      </Form.Item>
+                      <Form.Item
+                        label="Level Multiplier"
+                        name="lvlMult"
+                        initialValue={monst.LVL_Multiplier ?? 1}
+                      >
+                        <InputNumber step={.05} precision={2} />
+                      </Form.Item>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colSpan={2}>
+                      <Button type='primary' htmlType="submit">Submit</Button>
+                    </td>
+                  </tr>
+                </table>
               </Form>
             </div>
           </main>
