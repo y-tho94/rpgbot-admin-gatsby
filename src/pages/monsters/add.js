@@ -69,12 +69,28 @@ class MonsterForm extends React.Component {
     return retval;
   }
 
-  handleDelete = () => {
-    alert('deleted')
+  handleDelete = (e) => {
+    e.preventDefault();
+    const proceed = window.confirm('Delete this monster?');
+    if (proceed) {
+      this.deleteMonster()
+    }
+  }
+
+  deleteMonster = async () => {
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Referrer-Policy': 'same-origin',
+      }
+    }
+
+    const response = await fetch('https://dev.freydo-apis.tech/rpgbot/monster/get-types-lk/index.php', options);
   }
 
   frmSubmit = (items) => {
-
+    alert('submitted');
   }
 
   frmFail = (items) => {
@@ -90,9 +106,10 @@ class MonsterForm extends React.Component {
       </footer></div>)
     }
 
+    const newMonster = +this.state.qsID === 0;
 
     let titleString = 'Modify';
-    if (this.state.qsID == 0) {
+    if (newMonster) {
       titleString = 'Create New';
     }
 
@@ -122,121 +139,123 @@ class MonsterForm extends React.Component {
                 layout='vertical'
               >
                 <table style={{ width: '50%', margin: 'auto' }}>
-                  <tr>
-                    <td colSpan={2}>
-                      <Form.Item
-                        label="Name"
-                        name="name"
-                        initialValue={monst.name ?? ''}
-                        rules={
-                          [
-                            {
-                              required: true,
-                              message: '*Name required'
-                            }
-                          ]}
-                      >
-                        <Input />
-                      </Form.Item>
-                      <Form.Item
-                        label="Type"
-                        name="type_ID"
-                        initialValue={monst.type}
-                        rules={
-                          [
-                            {
-                              required: true,
-                              message: '*Type required'
-                            }
-                          ]}
-                      >
-                        <Select>
-                          {types.map(t => {
-                            return (
-                              <Select.Option
-                                key={t.id}
-                                value={t.id}
-                              >
-                                {t.Type_Desc}
-                              </Select.Option>
-                            )
-                          })}
-                        </Select>
-                      </Form.Item>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Form.Item
-                        label="Base HP"
-                        name="baseHP"
-                        initialValue={monst.HP ?? 1}
-                      >
-                        <InputNumber step={1} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Base ATK"
-                        name="baseATK"
-                        initialValue={monst.ATK ?? 1}
-                      >
-                        <InputNumber step={1} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Base DEF"
-                        name="baseDEF"
-                        initialValue={monst.DEF ?? 1}
-                      >
-                        <InputNumber step={1} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Base SPD"
-                        name="baseSPD"
-                        initialValue={monst.SPD ?? 1}
-                      >
-                        <InputNumber step={1} />
-                      </Form.Item>
-                    </td>
-                    <td>
-                      <Form.Item
-                        label="Base SPEC"
-                        name="baseSPEC"
-                        initialValue={monst.Spec ?? 1}
-                      >
-                        <InputNumber step={1} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Base Wealth"
-                        name="baseWealth"
-                        initialValue={monst.Money ?? 10}
-                      >
-                        <InputNumber step={10} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Base XP"
-                        name="baseXP"
-                        initialValue={monst.XP ?? 10}
-                      >
-                        <InputNumber step={10} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Level Multiplier"
-                        name="lvlMult"
-                        initialValue={monst.LVL_Multiplier ?? 0.05}
-                      >
-                        <InputNumber step={.05} precision={2} />
-                      </Form.Item>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={2}>
-                      <Button type='primary' htmlType="submit">Submit</Button>
-                      {() => {
-                        if (this.state.qsID > 0) {
-                          return <Button type='primary' danger onClick={() => this.handleDelete}>Delete</Button>
-                        }
-                      }}
-                    </td>
-                  </tr>
+                  <tbody>
+                    <tr>
+                      <td colSpan={2}>
+                        <Form.Item
+                          label="Name"
+                          name="name"
+                          initialValue={monst.name ?? ''}
+                          rules={
+                            [
+                              {
+                                required: true,
+                                message: '*Name required'
+                              }
+                            ]}
+                        >
+                          <Input />
+                        </Form.Item>
+                        <Form.Item
+                          label="Type"
+                          name="type_ID"
+                          initialValue={monst.type}
+                          rules={
+                            [
+                              {
+                                required: true,
+                                message: '*Type required'
+                              }
+                            ]}
+                        >
+                          <Select>
+                            {types.map(t => {
+                              return (
+                                <Select.Option
+                                  key={t.id}
+                                  value={t.id}
+                                >
+                                  {t.Type_Desc}
+                                </Select.Option>
+                              )
+                            })}
+                          </Select>
+                        </Form.Item>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <Form.Item
+                          label="Base HP"
+                          name="baseHP"
+                          initialValue={monst.HP ?? 1}
+                        >
+                          <InputNumber step={1} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Base ATK"
+                          name="baseATK"
+                          initialValue={monst.ATK ?? 1}
+                        >
+                          <InputNumber step={1} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Base DEF"
+                          name="baseDEF"
+                          initialValue={monst.DEF ?? 1}
+                        >
+                          <InputNumber step={1} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Base SPD"
+                          name="baseSPD"
+                          initialValue={monst.SPD ?? 1}
+                        >
+                          <InputNumber step={1} />
+                        </Form.Item>
+                      </td>
+                      <td>
+                        <Form.Item
+                          label="Base SPEC"
+                          name="baseSPEC"
+                          initialValue={monst.Spec ?? 1}
+                        >
+                          <InputNumber step={1} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Base Wealth"
+                          name="baseWealth"
+                          initialValue={monst.Money ?? 10}
+                        >
+                          <InputNumber step={10} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Base XP"
+                          name="baseXP"
+                          initialValue={monst.XP ?? 10}
+                        >
+                          <InputNumber step={10} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Level Multiplier"
+                          name="lvlMult"
+                          initialValue={monst.LVL_Multiplier ?? 0.05}
+                        >
+                          <InputNumber step={.05} precision={2} />
+                        </Form.Item>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan={2} style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                        <Button type='primary' htmlType="submit">Submit</Button>
+                        <Button type='primary' danger onClick={this.handleDelete}
+                          style={{ display: !newMonster ? 'inline-block' : 'none' }}
+                        >
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </Form>
             </div>
